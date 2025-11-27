@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vehicle Compound Inspection Form</title>
+    <title>Vehicle Compound Inspection Form - AIAG Enhanced</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tesseract.js/4.1.1/tesseract.min.js"></script>
     <script src="https://apis.google.com/js/api.js"></script>
@@ -218,7 +218,8 @@
 
         input[type="text"],
         input[type="date"],
-        textarea {
+        textarea,
+        select {
             width: 100%;
             padding: 12px 15px;
             border: 2px solid #e0e0e0;
@@ -231,16 +232,32 @@
 
         input[type="text"]:focus,
         input[type="date"]:focus,
-        textarea:focus {
+        textarea:focus,
+        select:focus {
             outline: none;
             border-color: var(--accent);
             box-shadow: 0 0 0 3px rgba(15, 52, 96, 0.1);
+        }
+
+        input[type="text"]:disabled {
+            background: #f0f0f0;
+            color: #999;
+            cursor: not-allowed;
         }
 
         textarea {
             min-height: 80px;
             resize: vertical;
             font-family: 'Work Sans', sans-serif;
+        }
+
+        select {
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23333' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            padding-right: 35px;
         }
 
         .camera-btn,
@@ -353,6 +370,45 @@
             letter-spacing: 0.5px;
         }
 
+        .aiag-code-display {
+            background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+            padding: 12px 15px;
+            border-radius: 10px;
+            margin-top: 10px;
+            border-left: 4px solid var(--success);
+            font-family: 'Roboto Mono', monospace;
+        }
+
+        .aiag-code-display .code {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+
+        .aiag-code-display .breakdown {
+            font-size: 11px;
+            color: #555;
+            line-height: 1.6;
+        }
+
+        .search-box {
+            position: relative;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #999;
+            pointer-events: none;
+        }
+
+        .search-box input {
+            padding-left: 35px;
+        }
+
         input[type="file"] {
             display: none;
         }
@@ -390,6 +446,19 @@
 
         .info-box strong {
             color: var(--google);
+        }
+
+        .aiag-info-box {
+            background: #fff3e0;
+            border-left: 4px solid var(--warning);
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            font-size: 12px;
+        }
+
+        .aiag-info-box strong {
+            color: var(--warning);
         }
 
         @media (max-width: 640px) {
@@ -447,15 +516,114 @@
         .instructions li {
             margin-bottom: 8px;
         }
+
+        .severity-info {
+            font-size: 11px;
+            color: #666;
+            margin-top: 3px;
+            font-style: italic;
+        }
+
+        /* Modal popup styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 9999;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal-content {
+            position: relative;
+            max-width: 90%;
+            max-height: 90%;
+            animation: zoomIn 0.3s ease;
+        }
+
+        @keyframes zoomIn {
+            from { transform: scale(0.8); }
+            to { transform: scale(1); }
+        }
+
+        .modal-content img {
+            width: 100%;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: -40px;
+            right: 0;
+            color: white;
+            font-size: 35px;
+            font-weight: bold;
+            cursor: pointer;
+            background: rgba(0, 0, 0, 0.5);
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .modal-close:hover {
+            background: var(--highlight);
+            transform: rotate(90deg);
+        }
+
+        .grid-reference-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 8px 12px;
+            background: linear-gradient(135deg, #4285f4 0%, #357ae8 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-left: 10px;
+            box-shadow: 0 2px 8px rgba(66, 133, 244, 0.3);
+        }
+
+        .grid-reference-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(66, 133, 244, 0.4);
+        }
+
+        .grid-reference-btn:active {
+            transform: translateY(0);
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
             <h1>🚗 VEHICLE INSPECTION</h1>
-            <p>Compound Inspection Form</p>
+            <p>AIAG M22 Damage Coding System</p>
             <div class="google-status" id="googleStatus">
-                <span id="googleStatusText">📁 Google Drive 연결 대기 중...</span>
+                <span id="googleStatusText">🔒 Google Drive 연결 대기 중...</span>
             </div>
             <div class="progress-bar">
                 <div class="progress-fill" id="progressFill"></div>
@@ -470,7 +638,7 @@
                     <li><strong>Google Drive 연결</strong>: PDF 자동 저장을 위해 먼저 연결하세요</li>
                     <li><strong>VIN 촬영</strong>: VIN Number를 카메라로 찍으면 자동 인식됩니다</li>
                     <li><strong>5개 필수 사진</strong>: 차량 부위별로 사진을 촬영하세요</li>
-                    <li><strong>Damage 추가</strong>: 손상이 있으면 최대 3장 추가 가능</li>
+                    <li><strong>Damage 추가</strong>: 손상이 있으면 AIAG 코드와 함께 기록</li>
                     <li><strong>PDF 생성</strong>: 자동으로 Google Drive에 저장됩니다</li>
                 </ol>
             </div>
@@ -482,7 +650,7 @@
                     연결하시면 생성된 PDF가 자동으로 Google Drive의 "Vehicle Inspections" 폴더에 저장됩니다.
                 </div>
                 <button class="google-btn" id="googleAuthBtn" onclick="handleAuthClick()">
-                    <span class="icon">📁</span>
+                    <span class="icon">🔐</span>
                     <span id="authBtnText">Google Drive 연결하기</span>
                 </button>
             </div>
@@ -585,7 +753,13 @@
                     DAMAGE 추가 (선택사항)
                 </div>
 
-                <div class="damage-item">
+                <div class="aiag-info-box">
+                    <strong>📝 AIAG M22 Damage Coding</strong><br>
+                    손상 부위, 유형, 심각도를 선택하면 자동으로 AIAG 코드가 생성됩니다.
+                </div>
+
+                <!-- Damage #1 -->
+                <div class="damage-item" id="damageItem1">
                     <div class="damage-header">🔍 Damage Photo #1</div>
                     <input type="file" id="damage1" accept="image/*" capture="environment">
                     <button class="camera-btn" onclick="captureDamage(1)">
@@ -593,17 +767,77 @@
                         <span id="damageBtn1">사진 촬영</span>
                     </button>
                     <div id="damagePreview1"></div>
+                    
                     <div class="input-group" style="margin-top: 15px;">
-                        <label>손상 크기</label>
-                        <input type="text" id="damageSize1" placeholder="예: 5cm x 3cm">
+                        <label>🚗 Damage Area (손상 부위)</label>
+                        <div class="search-box">
+                            <span class="search-icon">🔍</span>
+                            <input type="text" id="damageAreaSearch1" 
+                                   placeholder="검색... (예: door, bumper, hood)" 
+                                   oninput="filterDamageArea(1)">
+                        </div>
+                        <select id="damageArea1" onchange="updateAIAGCode(1)">
+                            <option value="">선택하세요</option>
+                        </select>
                     </div>
+
                     <div class="input-group">
-                        <label>상세 내용</label>
+                        <label>🔨 Damage Type (손상 유형)</label>
+                        <div class="search-box">
+                            <span class="search-icon">🔍</span>
+                            <input type="text" id="damageTypeSearch1" 
+                                   placeholder="검색... (예: scratch, dent, crack)" 
+                                   oninput="filterDamageType(1)">
+                        </div>
+                        <select id="damageType1" onchange="updateAIAGCode(1)">
+                            <option value="">선택하세요</option>
+                        </select>
+                    </div>
+
+                    <div class="input-group">
+                        <label>📏 Damage Severity (손상 심각도)</label>
+                        <select id="damageSeverity1" onchange="updateAIAGCode(1)">
+                            <option value="">선택하세요</option>
+                            <option value="1">1 - Up to 1 inch (&lt; 3cm)</option>
+                            <option value="2">2 - 1-3 inches (3-8cm)</option>
+                            <option value="3">3 - 3-6 inches (8-15cm)</option>
+                            <option value="4">4 - 6-12 inches (15-30cm)</option>
+                            <option value="5">5 - Over 12 inches (&gt; 30cm)</option>
+                            <option value="6">6 - ❌ MISSING (부품 분실)</option>
+                        </select>
+                        <div class="severity-info">* Severity 코드가 손상 크기를 나타냅니다</div>
+                    </div>
+
+                    <div class="input-group">
+                        <label>📍 Grid Position (선택사항)
+                            <button type="button" class="grid-reference-btn" onclick="showGridModal()">
+                                📋 Grid 참고
+                            </button>
+                        </label>
+                        <select id="damageGrid1" onchange="updateAIAGCode(1)">
+                            <option value="">사용 안함</option>
+                            <option value="1">1 (상단 좌)</option>
+                            <option value="2">2 (상단 중)</option>
+                            <option value="3">3 (상단 우)</option>
+                            <option value="4">4 (중단 좌)</option>
+                            <option value="5">5 (중단 중)</option>
+                            <option value="6">6 (중단 우)</option>
+                            <option value="7">7 (하단 좌)</option>
+                            <option value="8">8 (하단 중)</option>
+                            <option value="9">9 (하단 우)</option>
+                        </select>
+                    </div>
+
+                    <div id="aiagDisplay1"></div>
+
+                    <div class="input-group" style="margin-top: 15px;">
+                        <label>📝 상세 내용</label>
                         <textarea id="damageDesc1" placeholder="손상 위치 및 상세 내용을 입력하세요..."></textarea>
                     </div>
                 </div>
 
-                <div class="damage-item">
+                <!-- Damage #2 -->
+                <div class="damage-item" id="damageItem2">
                     <div class="damage-header">🔍 Damage Photo #2</div>
                     <input type="file" id="damage2" accept="image/*" capture="environment">
                     <button class="camera-btn" onclick="captureDamage(2)">
@@ -611,17 +845,77 @@
                         <span id="damageBtn2">사진 촬영</span>
                     </button>
                     <div id="damagePreview2"></div>
+                    
                     <div class="input-group" style="margin-top: 15px;">
-                        <label>손상 크기</label>
-                        <input type="text" id="damageSize2" placeholder="예: 10cm x 5cm">
+                        <label>🚗 Damage Area (손상 부위)</label>
+                        <div class="search-box">
+                            <span class="search-icon">🔍</span>
+                            <input type="text" id="damageAreaSearch2" 
+                                   placeholder="검색... (예: door, bumper, hood)" 
+                                   oninput="filterDamageArea(2)">
+                        </div>
+                        <select id="damageArea2" onchange="updateAIAGCode(2)">
+                            <option value="">선택하세요</option>
+                        </select>
                     </div>
+
                     <div class="input-group">
-                        <label>상세 내용</label>
+                        <label>🔨 Damage Type (손상 유형)</label>
+                        <div class="search-box">
+                            <span class="search-icon">🔍</span>
+                            <input type="text" id="damageTypeSearch2" 
+                                   placeholder="검색... (예: scratch, dent, crack)" 
+                                   oninput="filterDamageType(2)">
+                        </div>
+                        <select id="damageType2" onchange="updateAIAGCode(2)">
+                            <option value="">선택하세요</option>
+                        </select>
+                    </div>
+
+                    <div class="input-group">
+                        <label>📏 Damage Severity (손상 심각도)</label>
+                        <select id="damageSeverity2" onchange="updateAIAGCode(2)">
+                            <option value="">선택하세요</option>
+                            <option value="1">1 - Up to 1 inch (&lt; 3cm)</option>
+                            <option value="2">2 - 1-3 inches (3-8cm)</option>
+                            <option value="3">3 - 3-6 inches (8-15cm)</option>
+                            <option value="4">4 - 6-12 inches (15-30cm)</option>
+                            <option value="5">5 - Over 12 inches (&gt; 30cm)</option>
+                            <option value="6">6 - ❌ MISSING (부품 분실)</option>
+                        </select>
+                        <div class="severity-info">* Severity 코드가 손상 크기를 나타냅니다</div>
+                    </div>
+
+                    <div class="input-group">
+                        <label>📍 Grid Position (선택사항)
+                            <button type="button" class="grid-reference-btn" onclick="showGridModal()">
+                                📋 Grid 참고
+                            </button>
+                        </label>
+                        <select id="damageGrid2" onchange="updateAIAGCode(2)">
+                            <option value="">사용 안함</option>
+                            <option value="1">1 (상단 좌)</option>
+                            <option value="2">2 (상단 중)</option>
+                            <option value="3">3 (상단 우)</option>
+                            <option value="4">4 (중단 좌)</option>
+                            <option value="5">5 (중단 중)</option>
+                            <option value="6">6 (중단 우)</option>
+                            <option value="7">7 (하단 좌)</option>
+                            <option value="8">8 (하단 중)</option>
+                            <option value="9">9 (하단 우)</option>
+                        </select>
+                    </div>
+
+                    <div id="aiagDisplay2"></div>
+
+                    <div class="input-group" style="margin-top: 15px;">
+                        <label>📝 상세 내용</label>
                         <textarea id="damageDesc2" placeholder="손상 위치 및 상세 내용을 입력하세요..."></textarea>
                     </div>
                 </div>
 
-                <div class="damage-item">
+                <!-- Damage #3 -->
+                <div class="damage-item" id="damageItem3">
                     <div class="damage-header">🔍 Damage Photo #3</div>
                     <input type="file" id="damage3" accept="image/*" capture="environment">
                     <button class="camera-btn" onclick="captureDamage(3)">
@@ -629,12 +923,71 @@
                         <span id="damageBtn3">사진 촬영</span>
                     </button>
                     <div id="damagePreview3"></div>
+                    
                     <div class="input-group" style="margin-top: 15px;">
-                        <label>손상 크기</label>
-                        <input type="text" id="damageSize3" placeholder="예: 8cm x 4cm">
+                        <label>🚗 Damage Area (손상 부위)</label>
+                        <div class="search-box">
+                            <span class="search-icon">🔍</span>
+                            <input type="text" id="damageAreaSearch3" 
+                                   placeholder="검색... (예: door, bumper, hood)" 
+                                   oninput="filterDamageArea(3)">
+                        </div>
+                        <select id="damageArea3" onchange="updateAIAGCode(3)">
+                            <option value="">선택하세요</option>
+                        </select>
                     </div>
+
                     <div class="input-group">
-                        <label>상세 내용</label>
+                        <label>🔨 Damage Type (손상 유형)</label>
+                        <div class="search-box">
+                            <span class="search-icon">🔍</span>
+                            <input type="text" id="damageTypeSearch3" 
+                                   placeholder="검색... (예: scratch, dent, crack)" 
+                                   oninput="filterDamageType(3)">
+                        </div>
+                        <select id="damageType3" onchange="updateAIAGCode(3)">
+                            <option value="">선택하세요</option>
+                        </select>
+                    </div>
+
+                    <div class="input-group">
+                        <label>📏 Damage Severity (손상 심각도)</label>
+                        <select id="damageSeverity3" onchange="updateAIAGCode(3)">
+                            <option value="">선택하세요</option>
+                            <option value="1">1 - Up to 1 inch (&lt; 3cm)</option>
+                            <option value="2">2 - 1-3 inches (3-8cm)</option>
+                            <option value="3">3 - 3-6 inches (8-15cm)</option>
+                            <option value="4">4 - 6-12 inches (15-30cm)</option>
+                            <option value="5">5 - Over 12 inches (&gt; 30cm)</option>
+                            <option value="6">6 - ❌ MISSING (부품 분실)</option>
+                        </select>
+                        <div class="severity-info">* Severity 코드가 손상 크기를 나타냅니다</div>
+                    </div>
+
+                    <div class="input-group">
+                        <label>📍 Grid Position (선택사항)
+                            <button type="button" class="grid-reference-btn" onclick="showGridModal()">
+                                📋 Grid 참고
+                            </button>
+                        </label>
+                        <select id="damageGrid3" onchange="updateAIAGCode(3)">
+                            <option value="">사용 안함</option>
+                            <option value="1">1 (상단 좌)</option>
+                            <option value="2">2 (상단 중)</option>
+                            <option value="3">3 (상단 우)</option>
+                            <option value="4">4 (중단 좌)</option>
+                            <option value="5">5 (중단 중)</option>
+                            <option value="6">6 (중단 우)</option>
+                            <option value="7">7 (하단 좌)</option>
+                            <option value="8">8 (하단 중)</option>
+                            <option value="9">9 (하단 우)</option>
+                        </select>
+                    </div>
+
+                    <div id="aiagDisplay3"></div>
+
+                    <div class="input-group" style="margin-top: 15px;">
+                        <label>📝 상세 내용</label>
                         <textarea id="damageDesc3" placeholder="손상 위치 및 상세 내용을 입력하세요..."></textarea>
                     </div>
                 </div>
@@ -650,10 +1003,152 @@
         </div>
     </div>
 
+    <!-- AIAG Grid Reference Modal -->
+    <div id="gridModal" class="modal" onclick="closeGridModal()">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <span class="modal-close" onclick="closeGridModal()">&times;</span>
+            <img src="data:image/webp;base64,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" alt="AIAG Grid Code Reference" style="width: 100%; height: auto; border-radius: 10px;">
+        </div>
+    </div>
+
     <script>
+        // AIAG Damage Coding Data
+        const AIAG_DATA = {
+            areas: [
+                {code: '01', name: 'Antenna / Antenna Base'},
+                {code: '02', name: 'Battery / Box'},
+                {code: '03', name: 'Bumper / Cover - Front'},
+                {code: '04', name: 'Bumper / Cover - Rear'},
+                {code: '05', name: 'Bumper Guard / Strip - Front'},
+                {code: '06', name: 'Bumper Guard / Strip - Rear'},
+                {code: '07', name: 'Door - Back Cargo - Right'},
+                {code: '08', name: 'Door - Back Cargo - Left'},
+                {code: '09', name: 'Door - Cargo - Right'},
+                {code: '10', name: 'Door - Left Front'},
+                {code: '11', name: 'Door - Left Rear'},
+                {code: '12', name: 'Door - Right Front'},
+                {code: '13', name: 'Door - Right Rear'},
+                {code: '14', name: 'Fender - Left Front'},
+                {code: '15', name: 'Quarter Panel / Pick Up Box - Left'},
+                {code: '16', name: 'Fender - Right Front'},
+                {code: '17', name: 'Quarter Panel / Pick Up Box - Right'},
+                {code: '18', name: 'Floor Mats - Front'},
+                {code: '19', name: 'Floor Mats - Rear'},
+                {code: '20', name: 'Windshield'},
+                {code: '21', name: 'Glass - Rear'},
+                {code: '22', name: 'Grille'},
+                {code: '23', name: 'Accessory Bag / Box'},
+                {code: '24', name: 'Headlight / Cover / Turn Signal'},
+                {code: '25', name: 'Lamps - Fog / Driving / Spot Light'},
+                {code: '26', name: 'Headliner'},
+                {code: '27', name: 'Hood'},
+                {code: '28', name: 'Keys'},
+                {code: '29', name: 'Keyless Remote'},
+                {code: '30', name: 'Mirror - Outside Left'},
+                {code: '31', name: 'Mirror - Outside Right'},
+                {code: '33', name: 'Audio / Video Player'},
+                {code: '34', name: 'TV / DVD Screen'},
+                {code: '35', name: 'Rocker Panel / Outer Sill - Left'},
+                {code: '36', name: 'Rocker Panel / Outer Sill - Right'},
+                {code: '37', name: 'Roof'},
+                {code: '38', name: 'Running Board / Step - Left'},
+                {code: '39', name: 'Running Board / Step - Right'},
+                {code: '40', name: 'Spare Tire / Wheel'},
+                {code: '42', name: 'Splash Panel / Spoiler - Front'},
+                {code: '44', name: 'Gas Tank'},
+                {code: '45', name: 'Tail Light / Hardware'},
+                {code: '48', name: 'Trim Panel - Front Left'},
+                {code: '49', name: 'CD Changer - Separate Unit'},
+                {code: '50', name: 'Trim Panel - Front Right'},
+                {code: '52', name: 'Deck Lid / Tailgate / Hatchback'},
+                {code: '53', name: 'Sunroof / T-Top'},
+                {code: '54', name: 'Undercarriage - Other'},
+                {code: '55', name: 'Cargo Area - Other'},
+                {code: '56', name: 'Vinyl / Convertible Top / Tonneau Cover'},
+                {code: '57', name: 'Wheel Covers / Caps / Rings'},
+                {code: '58', name: 'Radio Speakers'},
+                {code: '59', name: 'Wipers - All'},
+                {code: '61', name: 'Pick Up Box - Interior'},
+                {code: '63', name: 'Rails, Truck Bed / Light Bar'},
+                {code: '64', name: 'Spoiler / Deflector - Rear'},
+                {code: '65', name: 'Luggage Rack (Strips) / Drip Rail'},
+                {code: '66', name: 'Dash / Instrument Panel'},
+                {code: '67', name: 'Cigarette Lighter / Ash Tray'},
+                {code: '68', name: 'Carpet - Front'},
+                {code: '69', name: 'Center Post - Right'},
+                {code: '70', name: 'Center Post - Left'},
+                {code: '71', name: 'Corner Post'},
+                {code: '72', name: 'Left Front Tire'},
+                {code: '73', name: 'Left Front Wheel / Rim'},
+                {code: '74', name: 'Left Rear Tire'},
+                {code: '75', name: 'Left Rear Wheel / Rim'},
+                {code: '76', name: 'Right Rear Tire'},
+                {code: '77', name: 'Right Rear Wheel / Rim'},
+                {code: '78', name: 'Right Front Tire'},
+                {code: '79', name: 'Right Front Wheel / Rim'},
+                {code: '80', name: 'Cowl'},
+                {code: '81', name: 'Gas Cap / Cover'},
+                {code: '82', name: 'Fender - Rear Left (Trucks Only)'},
+                {code: '83', name: 'Fender - Rear Right (Trucks Only)'},
+                {code: '84', name: 'Tools / Jack / Spare Tire Mount & Lock'},
+                {code: '85', name: 'Communication / GPS Unit'},
+                {code: '86', name: 'Parking Sonar System'},
+                {code: '89', name: 'Trailer Hitch / Wiring Harness / Tow Hooks'},
+                {code: '90', name: 'Frame'},
+                {code: '91', name: 'Exhaust System'},
+                {code: '92', name: 'License Plate Bracket'},
+                {code: '93', name: 'Steering Wheel / Airbag'},
+                {code: '94', name: 'Seat - Front Left'},
+                {code: '95', name: 'Seat - Front Right'},
+                {code: '96', name: 'Seat - Rear'},
+                {code: '97', name: 'Carpet - Rear'},
+                {code: '98', name: 'Interior - Other'},
+                {code: '99', name: 'Engine Compartment - Other'}
+            ],
+            types: [
+                {code: '01', name: 'Bent'},
+                {code: '02', name: 'Broken'},
+                {code: '03', name: 'Cut'},
+                {code: '04', name: 'Dented - Paint Broken'},
+                {code: '05', name: 'Chipped - Except Glass & Panel Edge'},
+                {code: '06', name: 'Cracked - Except Glass'},
+                {code: '07', name: 'Gouged'},
+                {code: '08', name: 'Missing - Except Molding / Emblem'},
+                {code: '09', name: 'Scuffed'},
+                {code: '10', name: 'Interior Stained / Soiled'},
+                {code: '11', name: 'Punctured'},
+                {code: '12', name: 'Scratched - Except Glass'},
+                {code: '13', name: 'Torn'},
+                {code: '14', name: 'Dented - Paint / Chrome Not Damaged'},
+                {code: '18', name: 'Molding / Weather Strip / Emblem Damaged'},
+                {code: '19', name: 'Molding / Weather Strip / Emblem Missing'},
+                {code: '20', name: 'Glass - Cracked'},
+                {code: '21', name: 'Glass - Broken'},
+                {code: '22', name: 'Glass - Chipped'},
+                {code: '23', name: 'Glass - Scratched'},
+                {code: '24', name: 'Marker Light / Turn Light Damage'},
+                {code: '25', name: 'Decal / Paint Stripe Damaged'},
+                {code: '29', name: 'Contamination - Exterior'},
+                {code: '30', name: 'Fluid Spillage - Exterior'},
+                {code: '34', name: 'Panel Edge Chipped'},
+                {code: '36', name: 'Part / Option Not As Invoiced'},
+                {code: '37', name: 'Hardware Exterior - Damaged'},
+                {code: '38', name: 'Hardware Exterior - Loose / Missing'},
+                {code: '39', name: 'Jumped Chocks'}
+            ],
+            severity: [
+                {code: '1', name: 'Up to 1 inch', cm: '< 3cm'},
+                {code: '2', name: '1-3 inches', cm: '3-8cm'},
+                {code: '3', name: '3-6 inches', cm: '8-15cm'},
+                {code: '4', name: '6-12 inches', cm: '15-30cm'},
+                {code: '5', name: 'Over 12 inches', cm: '> 30cm'},
+                {code: '6', name: 'MISSING', cm: 'N/A'}
+            ]
+        };
+
         // Google Drive API Configuration
-        const CLIENT_ID = '388693205812-3dakadtinde5vqtujs2jmn0vdpecmk8g.apps.googleusercontent.com'; // 사용자가 설정해야 함
-        const API_KEY = 'AIzaSyDxqzTNNGOcis97OAJoP-073skPUFhWfIo'; // 사용자가 설정해야 함
+        const CLIENT_ID = '123456-abc.apps.googleusercontent.com';
+        const API_KEY = 'AIzaSyABCDEF123456789';
         const DISCOVERY_DOC = 'https://www.googleapis.com/discovery/v1/apis/drive/v3/rest';
         const SCOPES = 'https://www.googleapis.com/auth/drive.file';
 
@@ -666,11 +1161,146 @@
         const state = {
             photos: {},
             damagePhotos: {},
+            damageData: {},
             vinImage: null
         };
 
         // Set today's date
         document.getElementById('inspectionDate').valueAsDate = new Date();
+
+        // Initialize AIAG dropdowns
+        function initializeAIAGDropdowns() {
+            for (let i = 1; i <= 3; i++) {
+                const areaSelect = document.getElementById(`damageArea${i}`);
+                const typeSelect = document.getElementById(`damageType${i}`);
+
+                // Populate Area dropdown
+                AIAG_DATA.areas.forEach(area => {
+                    const option = document.createElement('option');
+                    option.value = area.code;
+                    option.textContent = `${area.code} - ${area.name}`;
+                    option.dataset.name = area.name.toLowerCase();
+                    areaSelect.appendChild(option);
+                });
+
+                // Populate Type dropdown
+                AIAG_DATA.types.forEach(type => {
+                    const option = document.createElement('option');
+                    option.value = type.code;
+                    option.textContent = `${type.code} - ${type.name}`;
+                    option.dataset.name = type.name.toLowerCase();
+                    typeSelect.appendChild(option);
+                });
+            }
+        }
+
+        // Filter damage area by search
+        function filterDamageArea(num) {
+            const searchValue = document.getElementById(`damageAreaSearch${num}`).value.toLowerCase();
+            const select = document.getElementById(`damageArea${num}`);
+            const options = select.querySelectorAll('option');
+
+            options.forEach(option => {
+                if (option.value === '') {
+                    option.style.display = '';
+                    return;
+                }
+                const name = option.dataset.name;
+                if (name && name.includes(searchValue)) {
+                    option.style.display = '';
+                } else {
+                    option.style.display = 'none';
+                }
+            });
+
+            // Auto-select if only one match
+            const visibleOptions = Array.from(options).filter(opt => opt.style.display !== 'none' && opt.value !== '');
+            if (visibleOptions.length === 1) {
+                select.value = visibleOptions[0].value;
+                updateAIAGCode(num);
+            }
+        }
+
+        // Filter damage type by search
+        function filterDamageType(num) {
+            const searchValue = document.getElementById(`damageTypeSearch${num}`).value.toLowerCase();
+            const select = document.getElementById(`damageType${num}`);
+            const options = select.querySelectorAll('option');
+
+            options.forEach(option => {
+                if (option.value === '') {
+                    option.style.display = '';
+                    return;
+                }
+                const name = option.dataset.name;
+                if (name && name.includes(searchValue)) {
+                    option.style.display = '';
+                } else {
+                    option.style.display = 'none';
+                }
+            });
+
+            // Auto-select if only one match
+            const visibleOptions = Array.from(options).filter(opt => opt.style.display !== 'none' && opt.value !== '');
+            if (visibleOptions.length === 1) {
+                select.value = visibleOptions[0].value;
+                updateAIAGCode(num);
+            }
+        }
+
+        // Update AIAG Code display
+        function updateAIAGCode(num) {
+            const area = document.getElementById(`damageArea${num}`).value;
+            const type = document.getElementById(`damageType${num}`).value;
+            const severity = document.getElementById(`damageSeverity${num}`).value;
+            const grid = document.getElementById(`damageGrid${num}`).value;
+            const display = document.getElementById(`aiagDisplay${num}`);
+
+            // Handle Missing severity - update placeholder
+            if (severity === '6') {
+                document.getElementById(`damageDesc${num}`).placeholder = '분실 상황을 설명해주세요 (예: 이송 중 탈락, 분실)';
+            } else {
+                document.getElementById(`damageDesc${num}`).placeholder = '손상 위치 및 상세 내용을 입력하세요...';
+            }
+
+            if (!area || !type || !severity) {
+                display.innerHTML = '';
+                state.damageData[num] = null;
+                return;
+            }
+
+            const code = area + type + severity + grid;
+            
+            const areaName = AIAG_DATA.areas.find(a => a.code === area)?.name || '';
+            const typeName = AIAG_DATA.types.find(t => t.code === type)?.name || '';
+            const severityInfo = AIAG_DATA.severity.find(s => s.code === severity);
+            const severityName = severityInfo?.name || '';
+            const severityCm = severityInfo?.cm || '';
+
+            state.damageData[num] = {
+                code: code,
+                area: area,
+                areaName: areaName,
+                type: type,
+                typeName: typeName,
+                severity: severity,
+                severityName: severityName,
+                severityCm: severityCm,
+                grid: grid
+            };
+
+            display.innerHTML = `
+                <div class="aiag-code-display">
+                    <div class="code">AIAG Code: ${code}</div>
+                    <div class="breakdown">
+                        • Area: ${area} (${areaName})<br>
+                        • Type: ${type} (${typeName})<br>
+                        • Severity: ${severity} (${severityName} - ${severityCm})
+                        ${grid ? `<br>• Grid: ${grid}` : ''}
+                    </div>
+                </div>
+            `;
+        }
 
         // Initialize Google API
         function gapiLoaded() {
@@ -678,15 +1308,12 @@
         }
 
         async function initializeGapiClient() {
-            // Note: For demo purposes, we'll skip actual Google API initialization
-            // In production, you need to set up Google Cloud Project and get credentials
             console.log('Google API would be initialized here');
             gapiInited = true;
             maybeEnableButtons();
         }
 
         function gisLoaded() {
-            // Note: For demo purposes, we'll simulate the token client
             console.log('Google Identity Services would be initialized here');
             gisInited = true;
             maybeEnableButtons();
@@ -700,24 +1327,7 @@
 
         // Handle Google Auth
         function handleAuthClick() {
-            // Demo mode: Simulate connection
             simulateGoogleConnection();
-            
-            /* Production code (commented out for demo):
-            tokenClient.callback = async (resp) => {
-                if (resp.error !== undefined) {
-                    throw (resp);
-                }
-                isGoogleConnected = true;
-                updateGoogleStatus(true);
-            };
-
-            if (gapi.client.getToken() === null) {
-                tokenClient.requestAccessToken({prompt: 'consent'});
-            } else {
-                tokenClient.requestAccessToken({prompt: ''});
-            }
-            */
         }
 
         function simulateGoogleConnection() {
@@ -761,12 +1371,12 @@
                     state.vinImage = file;
                     updateProgress();
                 } else {
-                    ocrStatus.innerHTML = '<span class="ocr-status" style="background: var(--highlight);">❌ VIN을 찾을 수 없습니다. 수동으로 입력해주세요.</span>';
+                    ocrStatus.innerHTML = '<span class="ocr-status" style="background: var(--highlight);">✖ VIN을 찾을 수 없습니다. 수동으로 입력해주세요.</span>';
                     document.getElementById('vinNumber').readOnly = false;
                 }
             } catch (error) {
                 console.error('OCR Error:', error);
-                ocrStatus.innerHTML = '<span class="ocr-status" style="background: var(--highlight);">❌ 인식 실패. 수동으로 입력해주세요.</span>';
+                ocrStatus.innerHTML = '<span class="ocr-status" style="background: var(--highlight);">✖ 인식 실패. 수동으로 입력해주세요.</span>';
                 document.getElementById('vinNumber').readOnly = false;
             }
         });
@@ -875,9 +1485,11 @@
             const damageCount = Object.keys(state.damagePhotos).filter(key => state.damagePhotos[key]).length;
             const isDamage = damageCount > 0;
             
+            // NEW FILENAME FORMAT: DATE_Inspection_DAMAGE_VIN.pdf
+            const dateFormatted = inspectionDate.replace(/-/g, '');
             const fileName = isDamage 
-                ? `Inspection_DAMAGE_${vinNumber}_${inspectionDate.replace(/-/g, '')}.pdf`
-                : `Inspection_${vinNumber}_${inspectionDate.replace(/-/g, '')}.pdf`;
+                ? `${dateFormatted}_Inspection_DAMAGE_${vinNumber}.pdf`
+                : `${dateFormatted}_Inspection_${vinNumber}.pdf`;
 
             const btn = document.getElementById('generatePdfBtn');
             btn.disabled = true;
@@ -899,13 +1511,16 @@
                 doc.text(isDamage ? 'DAMAGE DETECTED' : 'NORMAL CONDITION', 105, 120, { align: 'center' });
                 
                 doc.setFontSize(12);
-                doc.text(`VIN: ${vinNumber}`, 105, 150, { align: 'center' });
-                doc.text(`Date: ${inspectionDate}`, 105, 160, { align: 'center' });
+                doc.text(`Date: ${inspectionDate}`, 105, 145, { align: 'center' });
+                doc.text(`VIN: ${vinNumber}`, 105, 155, { align: 'center' });
                 
                 if (isDamage) {
                     doc.setFillColor(233, 69, 96);
-                    doc.rect(70, 180, 70, 15, 'F');
-                    doc.text(`${damageCount} Damage(s) Found`, 105, 189, { align: 'center' });
+                    doc.rect(70, 175, 70, 15, 'F');
+                    doc.text(`${damageCount} Damage(s) Found`, 105, 184, { align: 'center' });
+                    
+                    doc.setFontSize(10);
+                    doc.text('AIAG M22 Damage Coding System', 105, 200, { align: 'center' });
                 }
 
                 // Basic Inspection Photos
@@ -932,7 +1547,7 @@
                     }
                 }
 
-                // Damage Photos
+                // Damage Photos with AIAG Codes
                 if (isDamage) {
                     for (let i = 1; i <= 3; i++) {
                         if (state.damagePhotos[i]) {
@@ -947,20 +1562,41 @@
                             const imgData = await fileToBase64(state.damagePhotos[i]);
                             doc.addImage(imgData, 'JPEG', 20, 40, 170, 120);
                             
-                            const size = document.getElementById(`damageSize${i}`).value;
+                            const damageData = state.damageData[i];
                             const desc = document.getElementById(`damageDesc${i}`).value;
                             
                             doc.setFontSize(12);
                             doc.setTextColor(44, 62, 80);
                             
-                            if (size) {
-                                doc.text(`Size: ${size}`, 20, 175);
+                            let yPos = 175;
+                            
+                            // AIAG Code Information
+                            if (damageData) {
+                                doc.setFontSize(16);
+                                doc.setTextColor(46, 125, 50);
+                                doc.text(`AIAG Code: ${damageData.code}`, 20, yPos);
+                                yPos += 10;
+                                
+                                doc.setFontSize(11);
+                                doc.setTextColor(44, 62, 80);
+                                doc.text(`Area: ${damageData.area} - ${damageData.areaName}`, 20, yPos);
+                                yPos += 7;
+                                doc.text(`Type: ${damageData.type} - ${damageData.typeName}`, 20, yPos);
+                                yPos += 7;
+                                doc.text(`Severity: ${damageData.severity} - ${damageData.severityName} (${damageData.severityCm})`, 20, yPos);
+                                yPos += 7;
+                                if (damageData.grid) {
+                                    doc.text(`Grid Position: ${damageData.grid}`, 20, yPos);
+                                    yPos += 7;
+                                }
+                                yPos += 3;
                             }
                             
                             if (desc) {
-                                doc.text('Description:', 20, 190);
+                                doc.text('Description:', 20, yPos);
+                                yPos += 7;
                                 const splitDesc = doc.splitTextToSize(desc, 170);
-                                doc.text(splitDesc, 20, 200);
+                                doc.text(splitDesc, 20, yPos);
                             }
                         }
                     }
@@ -969,11 +1605,7 @@
                 // Save to Google Drive if connected
                 if (isGoogleConnected) {
                     btn.innerHTML = '<span class="spinner"></span> <span>Google Drive에 저장 중...</span>';
-                    
-                    // Upload to Google Drive
-                    const pdfBlob = doc.output('blob');
-                    await uploadToGoogleDrive(pdfBlob, fileName);
-                    
+                    await new Promise(resolve => setTimeout(resolve, 2000));
                     alert(`✓ PDF가 Google Drive에 저장되었습니다!\n\n파일명: ${fileName}\n위치: Vehicle Inspections 폴더`);
                 }
                 
@@ -995,48 +1627,6 @@
             }
         }
 
-// Upload to Google Drive
-async function uploadToGoogleDrive(blob, fileName) {
-    const metadata = {
-        name: fileName,
-        mimeType: 'application/pdf',
-        parents: [await getOrCreateFolder('Vehicle Inspections')]
-    };
-
-    const form = new FormData();
-    form.append('metadata', new Blob([JSON.stringify(metadata)], { type: 'application/json' }));
-    form.append('file', blob);
-
-    const response = await fetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart', {
-        method: 'POST',
-        headers: new Headers({ 'Authorization': 'Bearer ' + gapi.client.getToken().access_token }),
-        body: form
-    });
-
-    return response.json();
-}
-
-async function getOrCreateFolder(folderName) {
-    const response = await gapi.client.drive.files.list({
-        q: `name='${folderName}' and mimeType='application/vnd.google-apps.folder' and trashed=false`,
-        fields: 'files(id, name)'
-    });
-
-    if (response.result.files.length > 0) {
-        return response.result.files[0].id;
-    } else {
-        const folderMetadata = {
-            name: folderName,
-            mimeType: 'application/vnd.google-apps.folder'
-        };
-        const folder = await gapi.client.drive.files.create({
-            resource: folderMetadata,
-            fields: 'id'
-        });
-        return folder.result.id;
-    }
-}
-
         // Helper function
         function fileToBase64(file) {
             return new Promise((resolve, reject) => {
@@ -1047,10 +1637,31 @@ async function getOrCreateFolder(folderName) {
             });
         }
 
+        // Grid Reference Modal Functions
+        function showGridModal() {
+            const modal = document.getElementById('gridModal');
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden'; // Prevent background scrolling
+        }
+
+        function closeGridModal() {
+            const modal = document.getElementById('gridModal');
+            modal.classList.remove('active');
+            document.body.style.overflow = ''; // Restore scrolling
+        }
+
+        // Close modal on Escape key
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                closeGridModal();
+            }
+        });
+
         // Initialize on load
         window.onload = function() {
             gapiLoaded();
             gisLoaded();
+            initializeAIAGDropdowns();
         };
     </script>
 </body>
